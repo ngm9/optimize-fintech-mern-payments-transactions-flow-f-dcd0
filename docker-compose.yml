@@ -1,0 +1,33 @@
+services:
+  mongo:
+    image: mongo
+    container_name: fintech-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - /root/task/mongo-data:/data/db
+      - /root/task/init_database.js:/docker-entrypoint-initdb.d/init_database.js:ro
+
+  backend:
+    image: node
+    container_name: fintech-backend
+    working_dir: /app
+    volumes:
+      - /root/task/backend:/app
+    command: sh -c "npm install && node server.js"
+    depends_on:
+      - mongo
+    ports:
+      - "5000:5000"
+
+  frontend:
+    image: node
+    container_name: fintech-frontend
+    working_dir: /app
+    volumes:
+      - /root/task/frontend:/app
+    command: sh -c "npm install && npm start"
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
