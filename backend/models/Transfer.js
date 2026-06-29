@@ -8,4 +8,7 @@ const transferSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+transferSchema.index({ accountId: 1, createdAt: -1 });
+transferSchema.index({ toAccountId: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Transfer', transferSchema);
